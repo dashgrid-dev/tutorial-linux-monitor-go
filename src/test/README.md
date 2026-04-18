@@ -19,11 +19,11 @@ The script cross-compiles `dashgrid-monitor-linux-amd64`, mounts this directory 
 
 Ctrl-C to stop. First sample appears after one `interval` (baseline for CPU/network deltas).
 
-
+### Stop container
 If Ctrl-C doesn't clean up (e.g. the terminal was closed), kill the container from another shell:
 
 ```bash
 docker ps --filter ancestor=debian:stable-slim -q | xargs -r docker kill
 ```
 
-Metrics reflect the *container*, not your Mac — CPU/memory are the container's share, disk is the Docker Desktop VM's virtual disk, network is the container's veth.
+Metrics reflect the *container*, not your machine — CPU/memory are the container's share, disk is the Docker Desktop VM's virtual disk, network is the container's veth.

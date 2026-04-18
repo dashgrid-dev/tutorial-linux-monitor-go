@@ -37,7 +37,7 @@ Single Go binary that pushes system metrics to [Dashgrid](https://dashgrid.com) 
 
 ## Build
 
-Cross-compile from macOS. Output goes into `src/build/` alongside `setup.sh` and `config.yaml`, so the whole directory can be `scp`'d to the host:
+Example cross-compile from macOS. Output goes into `src/build/` alongside `setup.sh` and `config.yaml`, so the whole directory can be `scp`'d to the host:
 
 ```bash
 cd src/monitor

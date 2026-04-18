@@ -1,7 +1,7 @@
 #!/bin/bash
 # Local test: cross-compile and run the monitor in a Docker linux container
 # config.test.yaml. Requires: docker, a reachable Dashgrid server at the
-# api_host set in config.test.yaml (localhost:* is remapped to the Mac host).
+# api_host set in config.test.yaml (localhost:* is remapped to the machine host).
 #
 # Usage: bash src/test/test-docker.sh     (Ctrl-C to stop)
 
