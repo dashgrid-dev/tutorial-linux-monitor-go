@@ -1,4 +1,4 @@
-# Dashgrid Linux Monitor
+# Dashgrid Linux Monitor (Go Version)
 
 Single Go binary that pushes system metrics to [Dashgrid](https://dashgrid.com) via REST API. No runtime dependencies.
 
