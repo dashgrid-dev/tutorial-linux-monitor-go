@@ -1,0 +1,9 @@
+api_host: "your-api-host-here"
+api_key: "your-api-key-here"
+interval: 10
+
+buckets:
+  cpu: "bucket-id-cpu"
+  memory: "bucket-id-memory"
+  disk: "bucket-id-disk"
+  network: "bucket-id-network"
