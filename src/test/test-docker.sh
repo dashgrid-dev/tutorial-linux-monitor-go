@@ -23,4 +23,4 @@ docker run --rm \
   -e DASHGRID_CONFIG=/monitor/config.test.yaml \
   --add-host=localhost:host-gateway \
   -v "$PWD:/monitor" -w /monitor \
-  debian:stable-slim ./dashgrid-monitor-linux-amd64
+  debian:stable-slim sh -c 'apt-get update -qq && apt-get install -y -qq --no-install-recommends ca-certificates >/dev/null && ./dashgrid-monitor-linux-amd64'

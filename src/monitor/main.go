@@ -86,6 +86,9 @@ func loadConfig() Config {
 
 // post sends records to a Dashgrid bucket
 func post(cfg Config, bucket string, records []Record) {
+	if bucket == "" {
+		return
+	}
 	body, _ := json.Marshal(records)
 	req, _ := http.NewRequest("POST", cfg.APIHost+"/api/buckets/"+bucket, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
