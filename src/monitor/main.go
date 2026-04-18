@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
@@ -213,10 +214,14 @@ func readNet(iface string) netSnap {
 func main() {
 	cfg := loadConfig()
 	iface := defaultIface()
+	ncpu := runtime.NumCPU()
+	if ncpu < 1 {
+		ncpu = 1
+	}
 	prevCPU := readCPU()
 	prevNet := readNet(iface)
 
-	log.Printf("started (interval: %ds, iface: %s)", cfg.Interval, iface)
+	log.Printf("started (interval: %ds, iface: %s, cores: %d)", cfg.Interval, iface, ncpu)
 	interval := time.Duration(cfg.Interval) * time.Second
 	time.Sleep(interval)
 
@@ -230,9 +235,14 @@ func main() {
 		post(cfg, cfg.Buckets.CPU, r(series(1, cpuPctVal)))
 		prevCPU = curCPU
 
-		// Load: 1m, 5m, 15m
+		// Load: 1m, 5m, 15m (raw) + per-core normalized
 		l1, l5, l15 := loadAvg()
-		post(cfg, cfg.Buckets.Load, r(series(1, l1), series(2, l5), series(3, l15)))
+		nc := float64(ncpu)
+		post(cfg, cfg.Buckets.Load, r(
+			series(1, l1), series(2, l5), series(3, l15),
+			series(4, l1/nc), series(5, l5/nc), series(6, l15/nc),
+			series(7, nc),
+		))
 
 		// Memory (MB): total, used, available
 		mt, mu, ma := readMem()

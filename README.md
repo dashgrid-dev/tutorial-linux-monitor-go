@@ -9,19 +9,21 @@ Single Go binary that pushes system metrics to [Dashgrid](https://dashgrid.com) 
 
 ## Metrics
 
-| Bucket | Series 1 | Series 2 | Series 3 |
-|--------|----------|----------|----------|
-| CPU | usage % | — | — |
-| Load | load 1m | load 5m | load 15m |
-| Memory | total MB | used MB | available MB |
-| Disk | total MB | used MB | available MB |
-| Network | rx KB/s | tx KB/s | — |
+| Bucket | Series 1 | Series 2 | Series 3 | Series 4 | Series 5 | Series 6 | Series 7 |
+|--------|----------|----------|----------|----------|----------|----------|----------|
+| CPU | usage % | — | — | — | — | — | — |
+| Load | load 1m | load 5m | load 15m | load 1m / core | load 5m / core | load 15m / core | cores |
+| Memory | total MB | used MB | available MB | — | — | — | — |
+| Disk | total MB | used MB | available MB | — | — | — | — |
+| Network | rx KB/s | tx KB/s | — | — | — | — | — |
 
 ### CPU
 - **usage %** — percentage of CPU time spent working (not idle) since last sample. Computed as delta from `/proc/stat`.
 
 ### Load
-- **load 1m / 5m / 15m** — average number of processes waiting to run over the last 1, 5, and 15 minutes. A load of 1.0 on a single-core machine means it's fully busy. Scale by number of cores.
+- **load 1m / 5m / 15m** — average number of processes waiting to run over the last 1, 5, and 15 minutes. A load of 1.0 on a single-core machine means it's fully busy.
+- **load 1m / 5m / 15m per core** — raw load divided by CPU core count (read once at startup via `runtime.NumCPU()`). 1.0 = fully saturated regardless of host; values > 1.0 mean the run queue is backing up.
+- **cores** — CPU core count (constant per process lifetime). Useful for annotating dashboards and sanity-checking the per-core normalization.
 
 ### Memory
 - **total MB** — total physical RAM installed.
