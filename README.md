@@ -5,19 +5,22 @@ Single Go binary that pushes system metrics to [Dashgrid](https://dashgrid.com) 
 ## Prerequisites
 
 1. Create a Dashgrid account and get an API key
-2. Create 4 TSV data buckets per host (CPU, Memory, Disk, Network)
+2. Create 5 TSV data buckets per host (CPU, Load, Memory, Disk, Network)
 
 ## Metrics
 
-| Bucket | Series 1 | Series 2 | Series 3 | Series 4 |
-|--------|----------|----------|----------|----------|
-| CPU | usage % | load 1m | load 5m | load 15m |
-| Memory | total MB | used MB | available MB | — |
-| Disk | total MB | used MB | available MB | — |
-| Network | rx KB/s | tx KB/s | — | — |
+| Bucket | Series 1 | Series 2 | Series 3 |
+|--------|----------|----------|----------|
+| CPU | usage % | — | — |
+| Load | load 1m | load 5m | load 15m |
+| Memory | total MB | used MB | available MB |
+| Disk | total MB | used MB | available MB |
+| Network | rx KB/s | tx KB/s | — |
 
 ### CPU
 - **usage %** — percentage of CPU time spent working (not idle) since last sample. Computed as delta from `/proc/stat`.
+
+### Load
 - **load 1m / 5m / 15m** — average number of processes waiting to run over the last 1, 5, and 15 minutes. A load of 1.0 on a single-core machine means it's fully busy. Scale by number of cores.
 
 ### Memory
@@ -52,6 +55,7 @@ interval: 10
 
 buckets:
   cpu: "bucket-id-cpu"
+  load: "bucket-id-load"
   memory: "bucket-id-memory"
   disk: "bucket-id-disk"
   network: "bucket-id-network"

@@ -22,6 +22,7 @@ type Config struct {
 	Interval int    `yaml:"interval"`
 	Buckets  struct {
 		CPU     string `yaml:"cpu"`
+		Load    string `yaml:"load"`
 		Memory  string `yaml:"memory"`
 		Disk    string `yaml:"disk"`
 		Network string `yaml:"network"`
@@ -223,12 +224,15 @@ func main() {
 		ts := time.Now().UTC().Format(time.RFC3339)
 		r := func(d ...Series) []Record { return []Record{{K: ts, D: d}} }
 
-		// CPU: usage%, load 1/5/15
+		// CPU: usage%
 		curCPU := readCPU()
 		cpuPctVal := cpuPct(prevCPU, curCPU)
-		l1, l5, l15 := loadAvg()
-		post(cfg, cfg.Buckets.CPU, r(series(1, cpuPctVal), series(2, l1), series(3, l5), series(4, l15)))
+		post(cfg, cfg.Buckets.CPU, r(series(1, cpuPctVal)))
 		prevCPU = curCPU
+
+		// Load: 1m, 5m, 15m
+		l1, l5, l15 := loadAvg()
+		post(cfg, cfg.Buckets.Load, r(series(1, l1), series(2, l5), series(3, l15)))
 
 		// Memory (MB): total, used, available
 		mt, mu, ma := readMem()
@@ -245,8 +249,8 @@ func main() {
 		prevNet = curNet
 		post(cfg, cfg.Buckets.Network, r(series(1, rxKB), series(2, txKB)))
 
-		log.Printf("[%s] cpu=%.1f%% mem=%d/%dMB disk=%d/%dMB net=%.2f/%.2f KB/s",
-			ts, cpuPctVal, mu, mt, du, dt, rxKB, txKB)
+		log.Printf("[%s] cpu=%.1f%% load=%.2f/%.2f/%.2f mem=%d/%dMB disk=%d/%dMB net=%.2f/%.2f KB/s",
+			ts, cpuPctVal, l1, l5, l15, mu, mt, du, dt, rxKB, txKB)
 		time.Sleep(interval)
 	}
 }
